@@ -56,10 +56,14 @@ class SummarizerIO:
         if self.translator:
             _pred = self.translator.output(_pred)
 
+        result = ""
         # Print result
         for i, pred in enumerate(_pred):
-            sys.stdout.write("[要約文%s] %s \n" % (start_n+i+1, pred))
+            result += pred + '。'
+            # sys.stdout.write("[要約文%s] %s \n" % (start_n+i+1, pred))
             # print("[Summary %s] %s" % (start_n+i+1, pred))
+        # sys.stdout.write("#############################")
+        sys.stdout.write(result)
 
     def _evaluate(self, test_data):
         self.model.eval()
