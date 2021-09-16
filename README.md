@@ -86,3 +86,6 @@ Training data should be a dictionary saved by `pickle`, to be specifically, a di
 2019-11-14  Add multiple language support
 
 2019-10-29 	Add auto parse function, available for long article as input
+
+### Version Note:
+transformers==2.9.0 is required
