@@ -4,13 +4,13 @@ from src.LangFactory import LangFactory
 
 
 class TestLoader:
-    def __init__(self, path, super_long, lang, translator=None):
-        self.path = path
+    def __init__(self, rawtexts, super_long, lang, translator=None):
+        self.rawtexts = rawtexts
         self.data = []
         self.super_long = super_long
         self.langfac = LangFactory(lang)
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
-        self._load_data()
+        # self._load_data()
         # If rawdata isnt modelized, use google translation to translate to English
         if self.langfac.stat is 'Invalid':
             self.translator = translator
@@ -24,21 +24,20 @@ class TestLoader:
     def _generate_results(self):
 
         if not self.super_long:
-            _, _ = self._add_result(self.fname, self.token_id)
+            _, _ = self._add_result(self.token_id)
         else:
             # Initialize indexes for while loop
             src_start, token_start, src_end = 0, 0, 1
             while src_end != 0:
-                token_end, src_end = self._add_result(self.fname, self.token_id,
+                token_end, src_end = self._add_result(self.token_id,
                                                       src_start, token_start)
                 token_start = token_end
                 src_start = src_end
 
-    def _add_result(self, fname, token_all, src_start=0, token_start=0):
+    def _add_result(self, token_all, src_start=0, token_start=0):
         results, (token_end, src_end) = self._all_tofixlen(token_all, src_start, token_start)
         token, clss, segs, labels, mask, mask_cls, src = results
-        self.data.append({'fname': fname,
-                          'src': token,
+        self.data.append({'src': token,
                           'labels': labels,
                           'segs': segs,
                           'mask': mask,
@@ -47,11 +46,11 @@ class TestLoader:
                           'src_str': src})
         return token_end, src_end
 
-    def _load_data(self):
-        self.fname = self.path.split('/')[-1].split('.')[0]
-        with open(self.path, 'r', encoding='utf-8_sig', errors='ignore') as f:
-            self.rawtexts = f.readlines()
-        self.rawtexts = ' '.join(self.rawtexts)
+    # def _load_data(self):
+    #     self.fname = self.path.split('/')[-1].split('.')[0]
+    #     with open(self.path, 'r', encoding='utf-8_sig', errors='ignore') as f:
+    #         self.rawtexts = f.readlines()
+    #     self.rawtexts = ' '.join(self.rawtexts)
 
     def _translate(self):
         texts = self.rawtexts

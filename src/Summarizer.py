@@ -63,7 +63,10 @@ class SummarizerIO:
             # sys.stdout.write("[要約文%s] %s \n" % (start_n+i+1, pred))
             # print("[Summary %s] %s" % (start_n+i+1, pred))
         # sys.stdout.write("#############################")
-        sys.stdout.write(result)
+        summarized_text = result.replace('\n', '')
+        with open('result.txt', 'a') as f:
+            f.write(summarized_text + '\n')
+        # sys.stdout.write(result)
 
     def _evaluate(self, test_data):
         self.model.eval()
@@ -81,7 +84,6 @@ class SummarizerIO:
         self.selected_ids = selected_ids[0]
         self.src_str = test_data['src_str']
         self.str_len = len(test_data['src_str'])
-        self.fname = test_data['fname']
 
     # Archieve so far
     def diet(self, percent):

@@ -7,6 +7,23 @@ from src.ModelLoader import ModelLoader
 from src.Summarizer import SummarizerIO
 from src.Translator import TranslatorY
 from src.LangFactory import LangFactory
+import pandas as pd
+
+body_list = []
+sum_list = []
+text_file = open('test_text.txt', "r")
+for line in text_file.readlines():
+    l = line
+    s1 = l.find('body') + 8
+    e1 = l.find("'}")
+    t1 = l[s1: e1]
+    body_list.append(t1)
+
+    s2 = l.find('body', s1) + 8
+    e2 = l.find("'}", s2)
+    t2 = l[s2: e2]
+    body_list.append(t2)
+
 
 os.chdir('./')
 
@@ -23,8 +40,8 @@ if __name__ == '__main__':
     Example: youyakuman.py -txt_file YOUR_FILE -n 3
     """)
 
-    parser.add_argument("-txt_file", default='test.txt',
-                        help='Text file for summarization (encoding:"utf-8_sig")')
+    # parser.add_argument("-txt_file", default='test.txt',
+    #                     help='Text file for summarization (encoding:"utf-8_sig")')
     parser.add_argument("-n", default=3, type=int,
                         help='Numbers of extraction summaries')
     parser.add_argument("-lang", default='en', type=str,
@@ -41,6 +58,9 @@ if __name__ == '__main__':
     lf = LangFactory(args.lang)
     translator = None if args.lang in lf.support_lang else TranslatorY()
 
-    data = TestLoader(args.txt_file, args.super_long, args.lang, translator).data
     model = ModelLoader(lf.toolkit.cp, lf.toolkit.opt, lf.toolkit.bert_model)
-    summarizer = SummarizerIO(data, model, args.n, translator)
+    sum_list = []
+    for i in range(len(body_list)):
+        data = TestLoader(body_list[i], args.super_long, args.lang, translator).data
+        summarizer = SummarizerIO(data, model, args.n, translator)
+
