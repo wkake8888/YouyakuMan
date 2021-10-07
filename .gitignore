@@ -1,0 +1,6 @@
+train_datas/
+*.json
+*.txt
+venv/
+*.xml
+trained_model/
