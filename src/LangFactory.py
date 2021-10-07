@@ -43,7 +43,7 @@ class JapaneseWorker:
                                             do_basic_tokenize=False)
         self.cls_id = self.bert_tokenizer.vocab['[CLS]']
         self.mask_id = self.bert_tokenizer.vocab['[MASK]']
-        self.bert_model = 'model/Japanese/bert/Japanese_L-12_H-768_A-12_E-30_BPE_WWM_transformers/'
+        self.bert_model = 'model/Japanese/bert/Japanese_L-12_H-768_A-12_E-30_BPE_WWM_transformers'
 
         self.cp = 'checkpoint/jp/youyakuman_jp_Aug20/cp_step_1200000.pt'
         self.opt = 'checkpoint/jp/youyakuman_jp_Aug20/opt_step_1200000.pt'
